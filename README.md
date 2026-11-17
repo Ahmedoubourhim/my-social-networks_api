@@ -2,7 +2,6 @@
 
 API REST de gestion d'événements, de groupes, de fils de discussion, d'albums photo, de sondages, de billetterie, de shopping list et de covoiturage (TP « My Social Networks API »).
 
-> **Documentation Postman publiée : <URL À COMPLÉTER>**
 >
 > (procédure de publication en bas de ce document, section [Documentation Postman](#documentation-postman))
 
