@@ -6,5 +6,8 @@ router.use('/auth', require('./authRoutes'));
 router.use('/users', require('./userRoutes'));
 router.use('/groups', require('./groupRoutes'));
 router.use('/events', require('./eventRoutes'));
+router.use('/threads', require('./threadRoutes'));
+router.use('/messages', require('./messageRoutes'));
+router.use('/comments', require('./commentRoutes'));
 
 module.exports = router;
