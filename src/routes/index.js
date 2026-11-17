@@ -9,5 +9,7 @@ router.use('/events', require('./eventRoutes'));
 router.use('/threads', require('./threadRoutes'));
 router.use('/messages', require('./messageRoutes'));
 router.use('/comments', require('./commentRoutes'));
+router.use('/albums', require('./albumRoutes'));
+router.use('/photos', require('./photoRoutes'));
 
 module.exports = router;

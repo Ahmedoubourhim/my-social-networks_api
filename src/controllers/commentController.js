@@ -3,6 +3,7 @@ const AppError = require('../utils/AppError');
 const { ok, noContent } = require('../utils/response');
 const { same } = require('../utils/ids');
 const ctxOf = require('../services/context');
+const access = require('../services/access');
 
 const AUTHOR = { path: 'author', select: 'firstname lastname avatar' };
 
@@ -15,7 +16,13 @@ async function getComment(id) {
 // Valable pour les commentaires de messages et de photos
 exports.get = async (req, res) => {
   const comment = await getComment(req.params.id);
-  ctxOf.requireMember(await ctxOf.ofComment(comment), req.user);
+  const ctx = await ctxOf.ofComment(comment);
+  if (comment.photo) {
+    // photo : visible comme l'événement (public ou participant)
+    if (!access.canSeeEvent(ctx.event, req.user)) throw new AppError(403, 'EVENT_PRIVATE', 'Cet événement est privé');
+  } else {
+    ctxOf.requireMember(ctx, req.user);
+  }
   await comment.populate(AUTHOR);
   ok(res, comment);
 };
