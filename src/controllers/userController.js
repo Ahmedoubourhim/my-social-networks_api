@@ -42,7 +42,10 @@ exports.update = async (req, res) => {
     const exists = await User.findOne({ email: req.body.email.toLowerCase() });
     if (exists) throw new AppError(409, 'EMAIL_ALREADY_USED', 'Un utilisateur avec cet email existe déjà');
   }
-  req.user.set(req.body);
+  // l'adresse est fusionnée champ par champ (une adresse partielle ne doit pas écraser l'existante)
+  const { address, ...fields } = req.body;
+  req.user.set(fields);
+  for (const [key, value] of Object.entries(address || {})) req.user.set(`address.${key}`, value);
   await req.user.save();
   ok(res, req.user);
 };

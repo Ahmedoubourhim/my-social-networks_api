@@ -86,7 +86,7 @@ exports.book = async (req, res) => {
   const updated = await CarpoolOffer.findOneAndUpdate(
     { _id: offer._id, availableSeats: { $gt: 0 }, passengers: { $ne: req.user._id } },
     { $inc: { availableSeats: -1 }, $push: { passengers: req.user._id } },
-    { new: true }
+    { returnDocument: 'after' }
   );
   if (!updated) throw new AppError(409, 'NO_SEATS_LEFT', "Il n'y a plus de place disponible dans cette voiture");
 
@@ -102,7 +102,7 @@ exports.cancelBooking = async (req, res) => {
   const updated = await CarpoolOffer.findOneAndUpdate(
     { _id: offer._id, passengers: req.user._id },
     { $inc: { availableSeats: 1 }, $pull: { passengers: req.user._id } },
-    { new: true }
+    { returnDocument: 'after' }
   );
   if (!updated) throw new AppError(404, 'NOT_BOOKED', "Vous n'avez pas réservé de place dans cette voiture");
   noContent(res);

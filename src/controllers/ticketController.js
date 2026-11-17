@@ -77,7 +77,7 @@ exports.updateType = async (req, res) => {
   // la nouvelle quantité ne peut pas être inférieure au nombre de billets déjà vendus (condition atomique)
   const filter = { _id: type._id };
   if (req.body.quantity !== undefined) filter.sold = { $lte: req.body.quantity };
-  const updated = await TicketType.findOneAndUpdate(filter, { $set: req.body }, { new: true, runValidators: true });
+  const updated = await TicketType.findOneAndUpdate(filter, { $set: req.body }, { returnDocument: 'after', runValidators: true });
   if (!updated) {
     throw new AppError(409, 'QUANTITY_BELOW_SOLD', 'La quantité ne peut pas être inférieure au nombre de billets déjà vendus');
   }
@@ -115,7 +115,7 @@ exports.purchase = async (req, res) => {
   const reserved = await TicketType.findOneAndUpdate(
     { _id: type._id, $expr: { $lt: ['$sold', '$quantity'] } },
     { $inc: { sold: 1 } },
-    { new: true }
+    { returnDocument: 'after' }
   );
   if (!reserved) throw new AppError(409, 'SOLD_OUT', 'Ce type de billet est épuisé');
 
@@ -168,7 +168,10 @@ exports.getTicket = async (req, res) => {
 exports.updateTicket = async (req, res) => {
   const ticket = await getTicket(req.params.id);
   access.requireOrganizer(await access.getEvent(ticket.event), req.user);
-  ticket.buyer.set(req.body.buyer);
+  // fusion champ par champ (sinon une adresse partielle écraserait toute l'adresse)
+  const { address, ...buyer } = req.body.buyer;
+  for (const [key, value] of Object.entries(buyer)) ticket.set(`buyer.${key}`, value);
+  for (const [key, value] of Object.entries(address || {})) ticket.set(`buyer.address.${key}`, value);
   try {
     await ticket.save();
   } catch (err) {

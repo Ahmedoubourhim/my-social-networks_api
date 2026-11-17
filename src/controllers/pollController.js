@@ -96,7 +96,7 @@ exports.vote = async (req, res) => {
   const previous = await Vote.findOneAndUpdate(
     filter,
     { $set: { answer: answerId }, $setOnInsert: { event: poll.event } },
-    { upsert: true, new: false }
+    { upsert: true, returnDocument: 'before' }
   );
   const vote = await Vote.findOne(filter);
   if (previous) return ok(res, vote); // vote remplacé
