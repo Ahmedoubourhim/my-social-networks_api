@@ -11,5 +11,6 @@ router.use('/messages', require('./messageRoutes'));
 router.use('/comments', require('./commentRoutes'));
 router.use('/albums', require('./albumRoutes'));
 router.use('/photos', require('./photoRoutes'));
+router.use('/polls', require('./pollRoutes'));
 
 module.exports = router;
