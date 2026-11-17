@@ -1,0 +1,16 @@
+node_modules/
+.env
+*.log
+.DS_Store
+
+# supports de cours / workspace Postman local (non livrés)
+tp/
+*.pdf
+.postman/
+postman/collections/
+postman/documents/
+postman/environments/
+postman/flows/
+postman/globals/
+postman/mocks/
+postman/specs/
