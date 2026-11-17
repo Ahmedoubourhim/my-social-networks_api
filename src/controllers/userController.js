@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const Group = require('../models/Group');
+const Event = require('../models/Event');
 const AppError = require('../utils/AppError');
 const { ok, noContent } = require('../utils/response');
 const { paginate, escapeRegex } = require('../utils/pagination');
@@ -49,6 +51,17 @@ exports.remove = async (req, res) => {
   if (!same(req.params.id, req.user._id)) {
     throw new AppError(403, 'FORBIDDEN', 'Vous ne pouvez supprimer que votre propre compte');
   }
+  const id = req.user._id;
+
+  // on ne peut pas laisser un groupe sans admin ni un événement sans organisateur
+  const soleAdmin = await Group.exists({ admins: [id] });
+  const soleOrganizer = await Event.exists({ organizers: [id] });
+  if (soleAdmin || soleOrganizer) {
+    throw new AppError(409, 'LAST_ADMIN_OR_ORGANIZER', "Vous êtes le seul administrateur d'un groupe ou le seul organisateur d'un événement : transférez ou supprimez-les d'abord");
+  }
+
+  await Group.updateMany({}, { $pull: { members: id, admins: id } });
+  await Event.updateMany({}, { $pull: { organizers: id, participants: id } });
   await req.user.deleteOne();
   noContent(res);
 };

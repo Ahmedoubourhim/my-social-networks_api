@@ -4,5 +4,7 @@ router.get('/health', (req, res) => res.json({ success: true, data: { status: 'o
 
 router.use('/auth', require('./authRoutes'));
 router.use('/users', require('./userRoutes'));
+router.use('/groups', require('./groupRoutes'));
+router.use('/events', require('./eventRoutes'));
 
 module.exports = router;
