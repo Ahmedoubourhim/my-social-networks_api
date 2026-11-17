@@ -3,7 +3,7 @@
 API REST de gestion d'événements, de groupes, de fils de discussion, d'albums photo, de sondages, de billetterie, de shopping list et de covoiturage (TP « My Social Networks API »).
 
 >
-> (procédure de publication en bas de ce document, section [Documentation Postman](#documentation-postman))
+> (procédure postman [Documentation Postman](#documentation-postman))
 
 ## Sommaire
 
@@ -445,10 +445,3 @@ Fichiers fournis dans `postman/` :
 4. Exécuter `Auth > Login (Alice)`, `Login (Bruno)` et `Login (Hugo)` : les scripts de test enregistrent `{{token}}`, `{{tokenBruno}}` et `{{tokenHugo}}`.
 5. Parcourir les dossiers de haut en bas (ou lancer la collection entière avec le *Collection Runner*) : les identifiants créés (`{{groupId}}`, `{{eventId}}`, ...) sont enregistrés automatiquement par les scripts de test et réutilisés par les requêtes suivantes. Pour rejouer la collection depuis le début, relancer `npm run seed`.
 
-### Publier la documentation
-
-1. Dans Postman, ouvrir la collection **My Social Networks API**.
-2. Cliquer sur **View documentation** (ou sur `...` → *View documentation*).
-3. Cliquer sur **Publish** (en haut à droite), choisir l'environnement **My Social Networks - Local**, régler la mise en forme si besoin, puis **Publish**.
-4. Copier l'URL publique obtenue et la coller en haut de ce README, à la place de `<URL À COMPLÉTER>`.
-5. Commit et push : `git add README.md && git commit -m "docs: url de la documentation Postman" && git push`.
